@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nitya Seva • Mandir Pooja Companion</title>
+  <style>
+    :root {
+      --day-primary: #ea580c;
+      --day-bg: #fff7ed;
+      --day-card: #ffffff;
+      --day-border: #fed7aa;
+      --day-text: #1f2937;
+      --day-accent: #c2410c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    body {
+      background-color: var(--day-bg);
+      color: var(--day-text);
+      padding: 12px 10px 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 550px;
+    }
+
+    /* Top Brand Card */
+    .brand-header {
+      background: linear-gradient(135deg, var(--day-primary), var(--day-accent));
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      margin-bottom: 12px;
+    }
+
+    .om-mark {
+      font-size: 26px;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: #fef08a;
+    }
+
+    .app-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .current-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    /* Quick Action Toolbar */
+    .action-toolbar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--day-border);
+      color: var(--day-primary);
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+    .pill-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Accordion Panels */
+    details.expandable-panel {
+      background: var(--day-card);
+      border: 1.5px solid var(--day-border);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    details.expandable-panel summary {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--day-primary);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    details.expandable-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.expandable-panel summary::after {
+      content: '▼';
+      font-size: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+
+    details[open].expandable-panel summary::after {
+      transform: rotate(-180deg);
+    }
+
+    .panel-content {
+      padding: 0 16px 14px;
+      font-size: 0.85rem;
+      color: #374151;
+      border-top: 1px dashed var(--day-border);
+      margin-top: 4px;
+      padding-top: 10px;
+    }
+
+    /* Checklist Styles */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+      margin-top: 6px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+    }
+
+    /* Vidhi Modes */
+    .vidhi-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .vidhi-tab {
+      flex: 1;
+      padding: 6px;
+      border: 1px solid var(--day-border);
+      background: #fff;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .vidhi-tab.active {
+      background: var(--day-primary);
+      color: #fff;
+      border-color: var(--day-primary);
+    }
+
+    .vidhi-step-list {
+      padding-left: 18px;
+      line-height: 1.6;
+      font-size: 0.82rem;
+    }
+
+    /* Japa Counter */
+    .counter-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--day-border);
+      margin-bottom: 12px;
+    }
+
+    .count-display {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--day-primary);
+    }
+
+    .count-tap-btn {
+      background: var(--day-primary);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .count-tap-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* Day Selector Pills */
+    .day-selector {
+      display: flex;
+      overflow-x: auto;
+      gap: 6px;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .day-selector::-webkit-scrollbar {
+      display: none;
+    }
+
+    .day-pill {
+      flex: 0 0 auto;
+      background: #ffffff;
+      border: 1px solid var(--day-border);
+      color: #64748b;
+      padding: 6px 13px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .day-pill.active {
+      background: var(--day-primary);
+      color: #ffffff;
+      border-color: var(--day-primary);
+    }
+
+    /* Step Cards */
+    .step-card {
+      background: var(--day-card);
+      border: 1.5px solid var(--day-border);
+      border-radius: 14px;
+      padding: 13px 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .step-card.completed {
+      opacity: 0.65;
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    .step-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .step-label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--day-primary);
+    }
+
+    .step-check {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--day-primary);
+      cursor: pointer;
+    }
+
+    .shloka-box {
+      font-family: "Georgia", serif;
+      font-style: italic;
+      background: rgba(0,0,0,0.02);
+      border-left: 3px solid var(--day-primary);
+      padding: 8px 10px;
+      font-size: 0.88rem;
+      line-height: 1.42;
+      color: #1e293b;
+      border-radius: 4px;
+      margin: 6px 0;
+    }
+
+    .kid-explainer {
+      font-size: 0.8rem;
+      color: #64748b;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .link-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tseries-link {
+      background: #dc2626;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Brand Header -->
+  <div class="brand-header">
+    <div class="om-mark">ॐ</div>
+    <div class="app-title">Nitya Seva Mandir</div>
+    <div class="current-badge" id="day-badge">Today: Somavāra</div>
+  </div>
+
+  <!-- Quick Action Bar -->
+  <div class="action-toolbar">
+    <button class="pill-btn" onclick="ringBell()">🔔 Ring Bell</button>
+    <button class="pill-btn" onclick="document.getElementById('panel-samagri').open = !document.getElementById('panel-samagri').open;">🪔 Samagri</button>
+    <button class="pill-btn" onclick="document.getElementById('panel-vidhi').open = !document.getElementById('panel-vidhi').open;">📜 Vidhi</button>
+  </div>
+
+  <!-- Expandable Tray 1: Samagri Checklist -->
+  <details class="expandable-panel" id="panel-samagri">
+    <summary>Mandir Preparation Checklist (Kid's Setup)</summary>
+    <div class="panel-content">
+      <div style="font-size: 0.78rem; color: #64748b; margin-bottom: 6px;">Check items as you set up the Mandir:</div>
+      <div class="checklist-grid">
+        <label class="check-item"><input type="checkbox"> Diya & Pure Ghee/Oil</label>
+        <label class="check-item"><input type="checkbox"> Cotton Wicks (Batti)</label>
+        <label class="check-item"><input type="checkbox"> Dhoop / Agarbatti</label>
+        <label class="check-item"><input type="checkbox"> Matchbox / Lighter</label>
+        <label class="check-item"><input type="checkbox"> Panchapatra & Water</label>
+        <label class="check-item"><input type="checkbox"> Chandan & Kumkum</label>
+        <label class="check-item"><input type="checkbox"> Akshata (Rice)</label>
+        <label class="check-item"><input type="checkbox"> Fresh Flowers / Leaves</label>
+        <label class="check-item"><input type="checkbox"> Naivedya (Fruit/Prasad)</label>
+        <label class="check-item"><input type="checkbox"> Camphor (Karpura)</label>
+      </div>
+    </div>
+  </details>
+
+  <!-- Expandable Tray 2: Vidhi Procedures -->
+  <details class="expandable-panel" id="panel-vidhi">
+    <summary>Pooja Vidhi Modes (Step-by-Step)</summary>
+    <div class="panel-content">
+      <div class="vidhi-toggle">
+        <button class="vidhi-tab active" id="tab-panch" onclick="switchVidhi('panch')">5-Step (Panchopachara)</button>
+        <button class="vidhi-tab" id="tab-shodash" onclick="switchVidhi('shodash')">16-Step (Shodashopachara)</button>
+      </div>
+
+      <div id="vidhi-text">
+        <ol class="vidhi-step-list">
+          <li><strong>Gandha (Earth)</strong>: Apply Chandan & Kumkum.</li>
+          <li><strong>Pushpa (Space)</strong>: Offer fresh flowers with devotion.</li>
+          <li><strong>Dhupa (Air)</strong>: Light and wave incense sticks.</li>
+          <li><strong>Deepa (Fire)</strong>: Wave the ghee lamp before the deity.</li>
+          <li><strong>Naivedya (Water/Taste)</strong>: Offer clean food/fruits followed by Aarti.</li>
+        </ol>
+      </div>
+    </div>
+  </details>
+
+  <!-- Japa Counter Bar (Gayatri & Daily Japa) -->
+  <div class="counter-card">
+    <div>
+      <div style="font-size: 0.8rem; font-weight: 700; color: #4b5563;">Gayatri Japa Counter</div>
+      <div class="count-display"><span id="japa-val">0</span> <span style="font-size:0.9rem; color:#9ca3af;">/ 11</span></div>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <button class="count-tap-btn" onclick="stepCount()">+ Tap Chant</button>
+      <button class="pill-btn" onclick="resetCount()" style="padding:6px 10px;">↺</button>
+    </div>
+  </div>
+
+  <!-- Day Selector Pills -->
+  <div class="day-selector" id="day-bar"></div>
+
+  <!-- Step 1: Deepam -->
+  <div class="step-card" id="card-step1">
+    <div class="step-top">
+      <span class="step-label">1. Lighting the Diya (Deepa Prajvalana)</span>
+      <input type="checkbox" class="step-check" onchange="toggleDone('card-step1', this)" />
+    </div>
+    <div class="shloka-box">
+      Śubhaṁ karoti kalyāṇam ārogyaṁ dhana-sampadā |<br>
+      Śatru-buddhi-vināśāya dīpa-jyotir namo'stu te ||
+    </div>
+    <div class="kid-explainer">"Salutations to the holy light bringing health, auspiciousness, and clear intellect."</div>
+    <div class="link-group">
+      <a class="tseries-link" href="https://www.youtube.com/results?search_query=T-Series+Bhakti+Sagar+Shubham+Karoti+Kalyanam" target="_blank">▶ T-Series Audio</a>
+    </div>
+  </div>
+
+  <!-- Step 2: Guru & Ganesha -->
+  <div class="step-card" id="card-step2">
+    <div class="step-top">
+      <span class="step-label">2. Guru Vandana & Ganesha Invocation</span>
+      <input type="checkbox" class="step-check" onchange="toggleDone('card-step2', this)" />
+    </div>
+    <div class="shloka-box">
+      Vakratuṇḍa mahākāya sūryakoṭi samaprabha |<br>
+      Nirvighnaṁ kuru me deva sarva-kāryeṣu sarvadā ||
+    </div>
+    <div class="kid-explainer">"O Lord Ganesha, clear all hurdles from our learning, health, and family paths."</div>
+    <div class="link-group">
+      <a class="tseries-link" href="https://www.youtube.com/results?search_query=T-Series+Bhakti+Sagar+Vakratunda+Mahakaya" target="_blank">▶ T-Series Audio</a>
+    </div>
+  </div>
+
+  <!-- Step 3: Gayatri Mantra -->
+  <div class="step-card" id="card-step3">
+    <div class="step-top">
+      <span class="step-label">3. Gayatri Mantra</span>
+      <input type="checkbox" class="step-check" onchange="toggleDone('card-step3', this)" />
+    </div>
+    <div class="shloka-box">
+      Oṁ bhūr bhuvaḥ svaḥ tat savitur vareṇyaṁ |<br>
+      bhargo devasya dhīmahi dhiyo yo naḥ pracodayāt ||
+    </div>
+    <div class="kid-explainer">"We meditate on the supreme light of wisdom. May it inspire and ignite our intellect."</div>
+    <div class="link-group">
+      <a class="tseries-link" href="https://www.youtube.com/results?search_query=T-Series+Bhakti+Sagar+Gayatri+Mantra+Anuradha+Paudwal" target="_blank">▶ T-Series Audio</a>
+    </div>
+  </div>
+
+  <!-- Step 4: Daily Presiding Deity -->
+  <div class="step-card" id="card-step4">
+    <div class="step-top">
+      <span class="step-label" id="daily-step-title">4. Today's Dedicated Deity</span>
+      <input type="checkbox" class="step-check" onchange="toggleDone('card-step4', this)" />
+    </div>
+    <div id="daily-content"></div>
+  </div>
+
+  <!-- Step 5: Aarti & Concluding Shlokas -->
+  <div class="step-card" id="card-step5">
+    <div class="step-top">
+      <span class="step-label">5. Aarti & Kshama Prarthana</span>
+      <input type="checkbox" class="step-check" onchange="toggleDone('card-step5', this)" />
+    </div>
+    <div class="shloka-box">
+      Karpūra-gauraṁ karuṇā-vatāraṁ saṁsāra-sāram bhuja-gendra-hāram |<br>
+      Sadā-vasantaṁ hṛdayā-ravinde bhavaṁ bhavānī-sahitaṁ namāmi ||
+    </div>
+    <div class="kid-explainer">Wave camphor/diya, turn clockwise 3 times, and offer all prayers to Sri Narayana.</div>
+    <div class="link-group">
+      <a class="tseries-link" href="https://www.youtube.com/results?search_query=T-Series+Bhakti+Sagar+Karpur+Gauram" target="_blank">▶ Karpura Aarti Audio</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const daysData = [
+    {
+      day: "Sunday", short: "Sun", name: "Ravivāra (Surya Bhagavan)",
+      colorName: "Amber", primary: "#ea580c", accent: "#c2410c", bg: "#fff7ed", border: "#fed7aa",
+      concept: "Vitality, Truth & Body Energy",
+      question: "Where can you bring light and energy into your routine today?",
+      shloka: "Japā-kusuma-saṅkāśaṁ kāśyapeyaṁ mahā-dyutim |<br>Tamo'riṁ sarva-pāpaghnaṁ praṇato'smi divākaram ||",
+      meaning: "Salutations to Surya Dev, brilliant like the red blossom, dispelling darkness and all lethargy.",
+      mantraSearch: "T-Series+Bhakti+Sagar+Surya+Mantra+Aditya+Hridaya",
+      aartiSearch: "T-Series+Bhakti+Sagar+Surya+Aarti"
+    },
+    {
+      day: "Monday", short: "Mon", name: "Somavāra (Lord Shiva)",
+      colorName: "Silver / Slate", primary: "#475569", accent: "#334155", bg: "#f8fafc", border: "#cbd5e1",
+      concept: "Calm Mind, Focus & Self-Mastery",
+      question: "How can you practice calm breathing when something frustrates you?",
+      shloka: "Oṁ tryambakaṁ yajāmahe sugandhiṁ puṣṭivardhanam |<br>urvārukamiva bandhanān mṛtyor mukṣīya māmṛtāt ||",
+      meaning: "We pray to three-eyed Lord Shiva, nourisher of life. May He free us from fear and ignorance.",
+      mantraSearch: "T-Series+Bhakti+Sagar+Maha+Mrityunjaya+Mantra",
+      aartiSearch: "T-Series+Bhakti+Sagar+Om+Jai+Shiv+Omkara+Anuradha+Paudwal"
+    },
+    {
+      day: "Tuesday", short: "Tue", name: "Maṅgalavāra (Lord Hanuman)",
+      colorName: "Vermilion Red", primary: "#dc2626", accent: "#991b1b", bg: "#fef2f2", border: "#fecaca",
+      concept: "Courage, Discipline & Selfless Strength",
+      question: "What is one hard task or subject you will tackle bravely today?",
+      shloka: "Manojavaṁ māruta-tulya-vegaṁ jitendriyaṁ buddhimatāṁ variṣṭham |<br>Vātātmajaṁ vānara-yūtha-mukhyaṁ śrīrāmadūtaṁ śaraṇaṁ prapadye ||",
+      meaning: "I surrender to Hanuman, swift as thought, master of the senses, and paragon of wisdom.",
+      mantraSearch: "Hanuman+Chalisa+Hariharan+Gulshan+Kumar+T-Series",
+      aartiSearch: "T-Series+Bhakti+Sagar+Aarti+Kije+Hanuman+Lala+Ki"
+    },
+    {
+      day: "Wednesday", short: "Wed", name: "Budhavāra (Lord Ganesha)",
+      colorName: "Emerald Green", primary: "#16a34a", accent: "#15803d", bg: "#f0fdf4", border: "#bbf7d0",
+      concept: "Wisdom, Memory & Clear Speech",
+      question: "What is something new you want to learn and understand deeply today?",
+      shloka: "Gajānanaṁ bhūta-gaṇādhi-sevitaṁ kapittha-jambū-phala-cāru-bhakṣaṇam |<br>Umā-sutaṁ śoka-vināśa-kāraṇaṁ namāmi vighneśvara-pāda-paṅkajam ||",
+      meaning: "I bow to elephant-faced Ganesha, remover of grief and giver of clear understanding.",
+      mantraSearch: "T-Series+Bhakti+Sagar+Sankat+Nashan+Ganesh+Stotram",
+      aartiSearch: "T-Series+Bhakti+Sagar+Jai+Ganesh+Deva+Anuradha+Paudwal"
+    },
+    {
+      day: "Thursday", short: "Thu", name: "Guruvāra (Lord Vishnu / Guru)",
+      colorName: "Golden Yellow", primary: "#ca8a04", accent: "#a16207", bg: "#fefce8", border: "#fef08a",
+      concept: "Knowledge, Respect for Teachers & Righteous Living",
+      question: "How can you show gratitude to your teachers and parents today?",
+      shloka: "Śāntākāraṁ bhujaga-śayanaṁ padmanābhaṁ sureśam |<br>Viśvādhāraṁ gagana-sadṛśaṁ megha-varṇaṁ śubhāṅgam ||",
+      meaning: "Salutations to Vishnu, resting in perfect peace, supporter and preserver of the universe.",
+      mantraSearch: "T-Series+Bhakti+Sagar+Shantakaram+Bhujagashayanam",
+      aartiSearch: "T-Series+Bhakti+Sagar+Om+Jai+Jagdish+Hare+Anuradha+Paudwal"
+    },
+    {
+      day: "Friday", short: "Fri", name: "Śukravāra (Maa Lakshmi & Durga)",
+      colorName: "Rose Pink", primary: "#db2777", accent: "#be185d", bg: "#fdf2f8", border: "#fbcfe8",
+      concept: "Generosity, Compassion & Cleanliness",
+      question: "How can you help or share something with someone who has less today?",
+      shloka: "Sarva-maṅgala-māṅgalye śive sarvārtha-sādhike |<br>Śaraṇye tryambake gauri nārāyaṇi namo'stu te ||",
+      meaning: "O divine mother Narayani, source of all auspiciousness, fulfiller of righteous aspirations.",
+      mantraSearch: "T-Series+Bhakti+Sagar+Sarva+Mangala+Mangalye",
+      aartiSearch: "T-Series+Bhakti+Sagar+Jai+Lakshmi+Mata+Anuradha+Paudwal"
+    },
+    {
+      day: "Saturday", short: "Sat", name: "Śanivāra (Lord Shani & Hanuman)",
+      colorName: "Navy Blue", primary: "#1d4ed8", accent: "#1e40af", bg: "#eff6ff", border: "#bfdbfe",
+      concept: "Patience, Responsibility & Good Daily Habits",
+      question: "Which daily chore will you complete without being reminded?",
+      shloka: "Nīlāñjana-samābhāsaṁ ravi-putraṁ yamāgrajam |<br>Chāyā-mārtaṇḍa-sambhūtaṁ taṁ namāmi śanaiścaram ||",
+      meaning: "I bow to Shani Dev, guide of patience, steady perseverance, and personal duty.",
+      mantraSearch: "T-Series+Bhakti+Sagar+Shani+Mantra+Nilanjana",
+      aartiSearch: "T-Series+Bhakti+Sagar+Shani+Aarti"
+    }
+  ];
+
+  const todayIndex = new Date().getDay();
+  let count = 0;
+
+  function applyDayTheme(dayObj) {
+    const root = document.documentElement;
+    root.style.setProperty('--day-primary', dayObj.primary);
+    root.style.setProperty('--day-accent', dayObj.accent);
+    root.style.setProperty('--day-bg', dayObj.bg);
+    root.style.setProperty('--day-border', dayObj.border);
+  }
+
+  function renderDay(index) {
+    const data = daysData[index];
+    applyDayTheme(data);
+
+    document.querySelectorAll(".day-pill").forEach((btn, idx) => {
+      btn.classList.toggle("active", idx === index);
+    });
+
+    document.getElementById("day-badge").innerText = `${data.day}: ${data.name}`;
+    document.getElementById("daily-step-title").innerText = `4. ${data.name}`;
+    document.getElementById("daily-content").innerHTML = `
+      <div style="font-size:0.8rem; font-weight:700; color:var(--day-primary); margin-bottom:4px;">
+        Theme: ${data.concept} (${data.colorName})
+      </div>
+      <div class="shloka-box">${data.shloka}</div>
+      <div class="kid-explainer">${data.meaning}</div>
+      <div style="font-size:0.78rem; background:rgba(0,0,0,0.03); border-left:2px solid var(--day-primary); padding:5px 8px; border-radius:4px; margin-bottom:8px;">
+        💭 <strong>Kid's Thought:</strong> ${data.question}
+      </div>
+      <div class="link-group">
+        <a class="tseries-link" href="https://www.youtube.com/results?search_query=${data.mantraSearch}" target="_blank">▶ Deity Chant (T-Series)</a>
+        <a class="tseries-link" href="https://www.youtube.com/results?search_query=${data.aartiSearch}" target="_blank">▶ Day Aarti (T-Series)</a>
+      </div>
+    `;
+  }
+
+  function toggleDone(cardId, el) {
+    document.getElementById(cardId).classList.toggle("completed", el.checked);
+  }
+
+  // Build Day Bar
+  const bar = document.getElementById("day-bar");
+  daysData.forEach((item, idx) => {
+    const btn = document.createElement("button");
+    btn.className = `day-pill ${idx === todayIndex ? "active" : ""}`;
+    btn.innerText = item.short;
+    btn.onclick = () => renderDay(idx);
+    bar.appendChild(btn);
+  });
+
+  renderDay(todayIndex);
+
+  // Vidhi Modes Switcher
+  function switchVidhi(mode) {
+    const textEl = document.getElementById("vidhi-text");
+    document.getElementById("tab-panch").classList.toggle("active", mode === "panch");
+    document.getElementById("tab-shodash").classList.toggle("active", mode === "shodash");
+
+    if (mode === "panch") {
+      textEl.innerHTML = `
+        <ol class="vidhi-step-list">
+          <li><strong>Gandha (Earth)</strong>: Apply Chandan & Kumkum.</li>
+          <li><strong>Pushpa (Space)</strong>: Offer fresh flowers with devotion.</li>
+          <li><strong>Dhupa (Air)</strong>: Light and wave incense sticks.</li>
+          <li><strong>Deepa (Fire)</strong>: Wave the ghee lamp before the deity.</li>
+          <li><strong>Naivedya (Water/Taste)</strong>: Offer clean food/fruits followed by Aarti.</li>
+        </ol>`;
+    } else {
+      textEl.innerHTML = `
+        <ol class="vidhi-step-list">
+          <li><strong>Dhyana & Avahana</strong>: Meditate and welcome deity into your heart.</li>
+          <li><strong>Asanam & Padyam</strong>: Offer seat and wash holy feet with water.</li>
+          <li><strong>Arghyam & Achamaniyam</strong>: Offer water for sipping and hands.</li>
+          <li><strong>Snanam & Vastram</strong>: Offer holy bath and sacred cloth/Akshata.</li>
+          <li><strong>Yajnopavita & Gandha</strong>: Offer sacred thread and Chandan/Kumkum.</li>
+          <li><strong>Pushpa, Dhupa, Deepa</strong>: Offer fresh flowers, incense, and lamp.</li>
+          <li><strong>Naivedya & Tambula</strong>: Offer food/fruit and clove/betel leaf.</li>
+          <li><strong>Aarti & Pradakshina</strong>: Perform camphor flame and 3 clockwise turns.</li>
+        </ol>`;
+    }
+  }
+
+  // Japa Counter Logic
+  function stepCount() {
+    count++;
+    document.getElementById("japa-val").innerText = count;
+    if (navigator.vibrate) { navigator.vibrate(40); }
+  }
+
+  function resetCount() {
+    count = 0;
+    document.getElementById("japa-val").innerText = count;
+  }
+
+  // Mandir Bell Chime Generator
+  function ringBell() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 1.2);
+      gain.gain.setValueAtTime(0.8, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 1.2);
+    } catch(e) {}
+  }
+</script>
+
+</body>
+</html>
