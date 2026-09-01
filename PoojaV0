@@ -460,22 +460,35 @@
     <div id="daily-content"></div>
   </div>
 
-  <!-- Step 5: Aarti & Concluding Shlokas -->
+    <!-- Step 5: Aarti, Surrender & Kshama Prarthana -->
   <div class="step-card" id="card-step5">
     <div class="step-top">
-      <span class="step-label">5. Aarti & Kshama Prarthana</span>
+      <span class="step-label">5. Aarti & Ultimate Surrender</span>
       <input type="checkbox" class="step-check" onchange="toggleDone('card-step5', this)" />
     </div>
-    <div class="shloka-box">
+    
+    <div style="font-size: 0.82rem; font-weight: 700; color: var(--day-primary); margin-bottom: 2px;">Karpura Aarti</div>
+    <div class="shloka-box" style="margin-bottom: 12px;">
       Karpūra-gauraṁ karuṇā-vatāraṁ saṁsāra-sāram bhuja-gendra-hāram |<br>
       Sadā-vasantaṁ hṛdayā-ravinde bhavaṁ bhavānī-sahitaṁ namāmi ||
     </div>
-    <div class="kid-explainer">Wave camphor/diya, turn clockwise 3 times, and offer all prayers to Sri Narayana.</div>
+    
+    <div style="font-size: 0.82rem; font-weight: 700; color: var(--day-primary); margin-bottom: 2px;">Sharanagati (Surrender)</div>
+    <div class="shloka-box">
+      Tvameva mātā ca pitā tvameva |<br>
+      Tvameva bandhuśca sakhā tvameva |<br>
+      Tvameva vidyā draviṇaṁ tvameva |<br>
+      Tvameva sarvaṁ mama deva deva ||
+    </div>
+    
+    <div class="kid-explainer">"You are my mother, father, family, and friend. You are my knowledge and wealth. You are my everything, O God of Gods."</div>
+    
     <div class="link-group">
-      <a class="tseries-link" href="https://www.youtube.com/results?search_query=T-Series+Bhakti+Sagar+Karpur+Gauram" target="_blank">▶ Karpura Aarti Audio</a>
+      <a class="tseries-link" href="https://www.youtube.com/results?search_query=Karpur+Gauram+T-Series" target="_blank">▶ Aarti Audio</a>
+      <a class="tseries-link" href="https://www.youtube.com/results?search_query=Twameva+Mata+Pita+Twameva+T-Series" target="_blank">▶ Twameva Mata Audio</a>
     </div>
   </div>
-</div>
+
 
 <script>
   const daysData = [
