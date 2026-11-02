@@ -643,16 +643,79 @@
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 1.2);
-      gain.gain.setValueAtTime(0.8, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(); osc.stop(ctx.currentTime + 1.2);
-    } catch(e) {}
+      const now = ctx.currentTime;
+      const master = ctx.createGain();
+      master.gain.setValueAtTime(0.72, now);
+      master.connect(ctx.destination);
+
+      // A temple bell is rich in inharmonic metallic overtones,
+      // not a single electronic sine-wave tone.
+      const partials = [
+        { ratio: 1.00, level: 0.34, decay: 6.8 },
+        { ratio: 2.01, level: 0.20, decay: 5.7 },
+        { ratio: 2.76, level: 0.24, decay: 5.0 },
+        { ratio: 4.07, level: 0.13, decay: 4.2 },
+        { ratio: 5.40, level: 0.11, decay: 3.6 },
+        { ratio: 6.80, level: 0.075, decay: 2.9 },
+        { ratio: 8.90, level: 0.045, decay: 2.3 }
+      ];
+      const fundamental = 220;
+
+      partials.forEach((p, i) => {
+        const osc = ctx.createOscillator();
+        const env = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(fundamental * p.ratio, now);
+        osc.detune.setValueAtTime((i % 2 ? 1 : -1) * (i * 1.7), now);
+        env.gain.setValueAtTime(0.0001, now);
+        env.gain.linearRampToValueAtTime(p.level, now + 0.012);
+        env.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
+        osc.connect(env);
+        env.connect(master);
+        osc.start(now);
+        osc.stop(now + p.decay + 0.05);
+      });
+
+      // A brief, filtered strike gives the bell its initial metallic attack.
+      const length = Math.floor(ctx.sampleRate * 0.16);
+      const noiseBuffer = ctx.createBuffer(1, length, ctx.sampleRate);
+      const data = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 3);
+      }
+      const noise = ctx.createBufferSource();
+      const filter = ctx.createBiquadFilter();
+      const strike = ctx.createGain();
+      noiseBuffer && (noise.buffer = noiseBuffer);
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(2800, now);
+      filter.Q.setValueAtTime(0.8, now);
+      strike.gain.setValueAtTime(0.16, now);
+      strike.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+      noise.connect(filter);
+      filter.connect(strike);
+      strike.connect(master);
+      noise.start(now);
+      noise.stop(now + 0.16);
+
+      // Soft echoes add the spacious resonance heard in a prayer room.
+      const delay = ctx.createDelay(1.0);
+      const feedback = ctx.createGain();
+      const wet = ctx.createGain();
+      delay.delayTime.setValueAtTime(0.28, now);
+      feedback.gain.setValueAtTime(0.20, now);
+      wet.gain.setValueAtTime(0.16, now);
+      master.connect(delay);
+      delay.connect(feedback);
+      feedback.connect(delay);
+      delay.connect(wet);
+      wet.connect(ctx.destination);
+
+      setTimeout(() => ctx.close().catch(() => {}), 8500);
+      if (ctx.state === "suspended") ctx.resume();
+    } catch (e) {
+      console.warn("Temple bell audio could not be played:", e);
+    }
   }
 
   // Run on load
